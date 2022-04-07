@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using demo.Context;
 
@@ -11,9 +12,10 @@ using demo.Context;
 namespace demo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220407162559_CreateManyToManyCartItem")]
+    partial class CreateManyToManyCartItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace demo.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("CartItem", b =>
+                {
+                    b.Property<Guid>("cartsid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("itemsid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("cartsid", "itemsid");
+
+                    b.HasIndex("itemsid");
+
+                    b.ToTable("CartItem");
+                });
 
             modelBuilder.Entity("demo.Models.Cart", b =>
                 {
@@ -37,29 +54,6 @@ namespace demo.Migrations
                     b.HasKey("id");
 
                     b.ToTable("carts");
-                });
-
-            modelBuilder.Entity("demo.Models.CartItem", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<Guid>("cartId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("itemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("cartId");
-
-                    b.HasIndex("itemId");
-
-                    b.ToTable("cartItems");
                 });
 
             modelBuilder.Entity("demo.Models.Item", b =>
@@ -83,33 +77,19 @@ namespace demo.Migrations
                     b.ToTable("Item");
                 });
 
-            modelBuilder.Entity("demo.Models.CartItem", b =>
+            modelBuilder.Entity("CartItem", b =>
                 {
-                    b.HasOne("demo.Models.Cart", "cart")
-                        .WithMany("items")
-                        .HasForeignKey("cartId")
+                    b.HasOne("demo.Models.Cart", null)
+                        .WithMany()
+                        .HasForeignKey("cartsid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("demo.Models.Item", "item")
-                        .WithMany("carts")
-                        .HasForeignKey("itemId")
+                    b.HasOne("demo.Models.Item", null)
+                        .WithMany()
+                        .HasForeignKey("itemsid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("cart");
-
-                    b.Navigation("item");
-                });
-
-            modelBuilder.Entity("demo.Models.Cart", b =>
-                {
-                    b.Navigation("items");
-                });
-
-            modelBuilder.Entity("demo.Models.Item", b =>
-                {
-                    b.Navigation("carts");
                 });
 #pragma warning restore 612, 618
         }

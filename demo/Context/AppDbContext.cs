@@ -11,5 +11,8 @@ namespace demo.Context
         }
 
         public DbSet<Item> items { get; set; }
+        public DbSet<Cart> carts { get; set; }
+        public DbSet<CartItem> cartItems { get; set; }
+            
     }
 }

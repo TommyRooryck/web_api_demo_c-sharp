@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\C#\\projects\\demo\\demo.Tests\\demo.Tests.csproj": {}
+    "D:\\C#\\projects\\web_api_demo_c-sharp\\demo.Tests\\demo.Tests.csproj": {}
   },
   "projects": {
-    "D:\\C#\\projects\\demo\\demo.Tests\\demo.Tests.csproj": {
+    "D:\\C#\\projects\\web_api_demo_c-sharp\\demo.Tests\\demo.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\C#\\projects\\demo\\demo.Tests\\demo.Tests.csproj",
+        "projectUniqueName": "D:\\C#\\projects\\web_api_demo_c-sharp\\demo.Tests\\demo.Tests.csproj",
         "projectName": "demo.Tests",
-        "projectPath": "D:\\C#\\projects\\demo\\demo.Tests\\demo.Tests.csproj",
+        "projectPath": "D:\\C#\\projects\\web_api_demo_c-sharp\\demo.Tests\\demo.Tests.csproj",
         "packagesPath": "C:\\Users\\tommy\\.nuget\\packages\\",
-        "outputPath": "D:\\C#\\projects\\demo\\demo.Tests\\obj\\",
+        "outputPath": "D:\\C#\\projects\\web_api_demo_c-sharp\\demo.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,8 +32,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\C#\\projects\\demo\\demo\\demo.csproj": {
-                "projectPath": "D:\\C#\\projects\\demo\\demo\\demo.csproj"
+              "D:\\C#\\projects\\web_api_demo_c-sharp\\demo\\demo.csproj": {
+                "projectPath": "D:\\C#\\projects\\web_api_demo_c-sharp\\demo\\demo.csproj"
               }
             }
           }
@@ -100,14 +100,14 @@
         }
       }
     },
-    "D:\\C#\\projects\\demo\\demo\\demo.csproj": {
+    "D:\\C#\\projects\\web_api_demo_c-sharp\\demo\\demo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\C#\\projects\\demo\\demo\\demo.csproj",
+        "projectUniqueName": "D:\\C#\\projects\\web_api_demo_c-sharp\\demo\\demo.csproj",
         "projectName": "demo",
-        "projectPath": "D:\\C#\\projects\\demo\\demo\\demo.csproj",
+        "projectPath": "D:\\C#\\projects\\web_api_demo_c-sharp\\demo\\demo.csproj",
         "packagesPath": "C:\\Users\\tommy\\.nuget\\packages\\",
-        "outputPath": "D:\\C#\\projects\\demo\\demo\\obj\\",
+        "outputPath": "D:\\C#\\projects\\web_api_demo_c-sharp\\demo\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -168,9 +168,17 @@
               "target": "Package",
               "version": "[6.0.3, )"
             },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
+            },
+            "System.Text.Json": {
+              "target": "Package",
+              "version": "[6.0.2, )"
             }
           },
           "imports": [
