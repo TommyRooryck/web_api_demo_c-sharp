@@ -25,9 +25,13 @@ namespace demo.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ItemDto>>> getItems()
+        public async Task<IEnumerable<ItemDto>> getItems()
         {
-            return Ok(await _context.items.ToListAsync());
+            var items = (await _context.items.ToListAsync())
+                .Select(item => item.asDto())
+            ;
+
+            return items;
         }
 
         [HttpGet("{id}")]
@@ -55,7 +59,7 @@ namespace demo.Controllers
             _context.items.Add(newItem);
             _context.SaveChanges();
 
-            return Ok(await _context.items.FindAsync(newItem.id));
+            return CreatedAtAction(nameof(getItem), new { id = newItem.id }, newItem.asDto());
         }
 
         [HttpPut("{id}")]
