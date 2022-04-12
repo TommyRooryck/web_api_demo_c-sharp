@@ -9,6 +9,7 @@ namespace demo.Extensions.Carts
         {
             return new CartDto
             {
+                id = cart.id,
                 items = cart.items
             };
         }

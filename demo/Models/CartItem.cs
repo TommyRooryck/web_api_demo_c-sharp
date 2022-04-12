@@ -13,5 +13,22 @@ namespace demo.Models
         public Guid itemId { get; set; }
         public Item item { get; set; }
 
+        public int quantity { get; set; } = 1;
+
+        public decimal subtotal
+        {
+            get
+            {
+                return quantity * item.price;
+            }
+        }
+
+        public CartItem increaseQuantity()
+        {
+            quantity++;
+
+            return this;
+        }
+
     }
 }

@@ -7,7 +7,7 @@ namespace demo.Models
         private static Cart instance;
 
         public Guid id { get; set; }
-        public List<CartItem> items { get; set; }
+        public List<CartItem> items { get; set; } = new List<CartItem>();
         public Status status { get; set; }
         public DateTime createdDate { get; set; }
         
@@ -20,6 +20,11 @@ namespace demo.Models
             }
 
             return instance;
+        }
+
+        public void update(Cart cart)
+        {
+            instance = cart;
         }
     }
 }

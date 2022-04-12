@@ -9,7 +9,8 @@ namespace demo.Extensions.CartItems
         {
             return new CartItemDto
             {
-                item = cartItem.item
+                item = cartItem.item,
+                quantity = cartItem.quantity,
             };
         }
     }

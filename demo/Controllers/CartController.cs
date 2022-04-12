@@ -21,9 +21,22 @@ namespace demo.Controllers
         }
 
         [HttpGet]
-        public ActionResult<CartDto> getCart()
+        public async Task<ActionResult<CartDto>> getCart()
         {
-            return Cart.getInstance().asDto();
+            return createCart().asDto();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CartDto>> getCartById(Guid id)
+        {
+            Cart? cart = await _context.carts.FindAsync(id);
+
+            if (cart == null)
+            {
+                return NotFound();
+            }
+
+            return cart.asDto();
         }
 
         [HttpPost]
@@ -36,42 +49,57 @@ namespace demo.Controllers
                 return NotFound("item not found");
             }
 
-            Cart cart = Cart.getInstance();
+            Cart currentCart = Cart.getInstance();
 
-            if (cart.id == Guid.Empty)
+            if (currentCart.id == Guid.Empty)
             {
-                _context.carts.Add(cart);
+                currentCart = createCart();
             }
 
+            Cart cart = _context.carts
+                        .Include(x => x.items)
+                        .ThenInclude(x => x.item)
+                        .Single(c => c.id == currentCart.id);
 
-            CartItem cartItem = new CartItem()
+            CartItem? existingCartItem = cart.items.SingleOrDefault(cartItem => cartItem.itemId == newCartItem.itemId);
+
+            if (existingCartItem == null)
             {
-                cartId = cart.id,
-                cart = cart,
-                item = item,
-                itemId = item.id
-            };
+                CartItem cartItem = new CartItem()
+                {
+                    cartId = cart.id,
+                    cart = cart,
+                    item = item,
+                    itemId = item.id
+                };
+                
+                cart.items.Add(cartItem);
 
-            _context.cartItems.Add(cartItem);
+            } else
+            {
+                cart.items.Single(cartItem => cartItem.id == existingCartItem.id ).increaseQuantity();
+            }
 
+            await _context.SaveChangesAsync();
 
-            return await save(cart);
+            return CreatedAtAction(nameof(getCartById), new { id = cart.id }, cart.asDto());
         }
 
-        private async Task<ActionResult<CartDto>> save(Cart cart)
+        private Cart createCart()
         {
+            Cart cart = Cart.getInstance();
+
             if (cart.id != Guid.Empty)
             {
-                var existingCart = await _context.carts.FindAsync(cart.id);
-                _context.Entry<Cart>(existingCart).CurrentValues.SetValues(cart);
-            }
-            else
-            {
-                _context.Add(cart);
-                await _context.SaveChangesAsync();
+                return cart;
             }
 
-            return CreatedAtAction(nameof(getCart), cart.asDto());
+            _context.carts.Add(cart);
+            _context.SaveChanges();
+
+            cart.update(cart);
+
+            return cart;
         }
     }
 }

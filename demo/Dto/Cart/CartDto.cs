@@ -1,18 +1,23 @@
 ﻿using demo.Models;
+using demo.Extensions.CartItems;
 
 namespace demo.Dto.Cart
 {
     public class CartDto
     {
-        public List<CartItem> items { get; set; }
+        public Guid id { get; set; }
+        public List<CartItem> items { get; set; } = new List<CartItem>();
         public decimal totalPrice
         {
             get
             {
                 decimal total = 0;
-                foreach (var item in items)
+                if (items.Count > 0)
                 {
-                    total += item.item.price;
+                    foreach (var item in items)
+                    {
+                        total += item.asDto().subtotal;
+                    }
                 }
 
                 return total;
