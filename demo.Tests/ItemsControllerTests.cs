@@ -67,7 +67,7 @@ namespace demo.Tests
             // Assert
             result.Value.Should().BeEquivalentTo(
                 expectedItem,
-                options => options.ComparingByMembers<Item>()
+                options => options.ComparingByMembers<Item>().ExcludingMissingMembers()
             );
         }
 

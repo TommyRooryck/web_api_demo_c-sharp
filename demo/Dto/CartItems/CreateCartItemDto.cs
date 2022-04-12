@@ -1,4 +1,5 @@
-﻿namespace demo.Dto.CartItems
+﻿
+namespace demo.Dto.CartItems
 {
     public class CreateCartItemDto
     {
