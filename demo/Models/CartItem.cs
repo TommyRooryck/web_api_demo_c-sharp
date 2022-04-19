@@ -4,7 +4,7 @@ namespace demo.Models
 {
     public class CartItem
     {
-        public int id { get; set; }
+        public int id { get; init; }
 
         [JsonIgnore]
         public Guid cartId { get; set; }

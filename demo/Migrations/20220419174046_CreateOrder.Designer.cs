@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using demo.Context;
 
@@ -11,9 +12,10 @@ using demo.Context;
 namespace demo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220419174046_CreateOrder")]
+    partial class CreateOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,8 +30,8 @@ namespace demo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("createdDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("status")
                         .HasColumnType("int");
@@ -95,9 +97,6 @@ namespace demo.Migrations
                     b.Property<Guid>("cartId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("createdDate")
-                        .HasColumnType("datetimeoffset");
-
                     b.Property<int>("status")
                         .HasColumnType("int");
 
@@ -106,7 +105,7 @@ namespace demo.Migrations
                     b.HasIndex("cartId")
                         .IsUnique();
 
-                    b.ToTable("orders");
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("demo.Models.CartItem", b =>
