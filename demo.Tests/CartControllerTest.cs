@@ -52,20 +52,9 @@ namespace demo.Tests
             var context = new AppDbContext(options);
 
             Item item = createRandomItem();
+            Item item2 = createRandomItem();
             context.items.Add(item);
-            await context.SaveChangesAsync();
-
-            Cart cart = new Cart();
-            context.carts.Add(cart);
-            await context.SaveChangesAsync();
-
-            CartItem cartItem = createCartItem(cart, item);
-            Cart dbCart = context.carts
-                     .Include(x => x.items)
-                     .ThenInclude(x => x.item)
-                     .Single(c => c.id == cart.id);
-
-            dbCart.items.Add(cartItem);
+            context.items.Add(item2);
             await context.SaveChangesAsync();
 
             var controller = new CartController(context);
@@ -78,14 +67,59 @@ namespace demo.Tests
                 }
             );
 
+            result = await controller.addToCart(
+                new CreateCartItemDto()
+                {
+                    itemId = item2.id
+                }
+            );
+
             var dto = (result.Result as CreatedAtActionResult).Value as CartDto;
 
             // Assert
-            result.Value.Should().BeOfType<CartDto>();
-            result.Value.Should().BeEquivalentTo(
-                dbCart,
-                options => options.ComparingByMembers<Cart>().ExcludingMissingMembers()
+            result.Result.Should().NotBeNull();
+            dto.id.Should().NotBeEmpty();
+            dto.items.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public async Task addToCart_existingItem_shouldIncreaseQuantity()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase("addToCart_existingItem_shouldIncreaseQuantity")
+                .Options
+            ;
+            var context = new AppDbContext(options);
+
+            Item item = createRandomItem();
+            context.items.Add(item);
+            await context.SaveChangesAsync();
+
+            var controller = new CartController(context);
+
+            // Act
+            var result = await controller.addToCart(
+                new CreateCartItemDto()
+                {
+                    itemId = item.id
+                }
             );
+
+            result = await controller.addToCart(
+                new CreateCartItemDto()
+                {
+                    itemId = item.id
+                }
+            );
+
+            var dto = (result.Result as CreatedAtActionResult).Value as CartDto;
+
+            // Assert
+            result.Result.Should().NotBeNull();
+            dto.id.Should().NotBeEmpty();
+            dto.items.Should().HaveCount(1);
+            dto.items.First().quantity.Should().Be(2);
         }
 
         private CartItem createCartItem(Cart cart, Item item)
@@ -103,7 +137,6 @@ namespace demo.Tests
         {
             return new Item()
             {
-                id = Guid.NewGuid(),
                 name = Guid.NewGuid().ToString(),
                 price = rng.Next(1000),
                 createdDate = DateTime.UtcNow,
